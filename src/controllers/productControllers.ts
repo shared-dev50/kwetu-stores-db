@@ -4,7 +4,6 @@ import {
   getAllProductsService,
 } from "../models/productModel.js";
 
-// Standardized response person
 const handleResponse = (
   res: any,
   status: any,

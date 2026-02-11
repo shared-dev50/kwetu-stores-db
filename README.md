@@ -68,6 +68,16 @@ price NUMERIC NOT NULL,
 created_at TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TABLE users (
+id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+name TEXT NOT NULL,
+pin_hash TEXT NOT NULL,
+role TEXT NOT NULL CHECK (role IN ('cashier', 'manager')),
+created_at TIMESTAMP DEFAULT NOW()
+);
+
+ALTER TABLE users ADD CONSTRAINT unique_name UNIQUE (name);
+
 ## Backend Setup
 
 git clone https://github.com/shared-dev50/kwetu-stores-db.git
