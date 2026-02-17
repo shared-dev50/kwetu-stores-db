@@ -77,6 +77,24 @@ created_at TIMESTAMP DEFAULT NOW()
 );
 
 ALTER TABLE users ADD CONSTRAINT unique_name UNIQUE (name);
+ALTER TABLE products ADD COLUMN stock INTEGER DEFAULT 0;
+
+// The Main Sales Table
+CREATE TABLE sales (
+id SERIAL PRIMARY KEY,
+total_amount DECIMAL(10, 2) NOT NULL,
+payment_method VARCHAR(20) NOT NULL, -- 'cash' or 'card'
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+// The Sale Items Table - Details
+CREATE TABLE sale_items (
+id SERIAL PRIMARY KEY,
+sale_id INTEGER REFERENCES sales(id) ON DELETE CASCADE,
+product_id INTEGER REFERENCES products(id),
+quantity INTEGER NOT NULL,
+unit_price DECIMAL(10, 2) NOT NULL
+);
 
 ## Backend Setup
 
@@ -94,6 +112,9 @@ DB_HOST="localhost"
 DB_NAME="kwetustores"
 DB_PORT=5432
 DB_PASSWORD="your-password"
+JWT_SECRET='62a21721d62ad491dab705d845e46b161ba21547f0051d8339b1632be9e686983b16dc98132e87575f71e001e9f7a4475dd6700acf91b7f969141b268216480d'
+STRIPE_SECRET_KEY='your-key'
+STRIPE_WEBHOOK_SECRET=whsec_your_secret_here
 
 ## Run the Server
 
@@ -124,3 +145,10 @@ Request body example:
   "price": 67
 }
 ```
+
+## Test Card
+
+Card Number: 4242 4242 4242 4242
+Expiry Date: Any date in the future
+CVC: Any
+Name on Card: Any
